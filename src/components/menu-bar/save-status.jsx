@@ -47,6 +47,6 @@ const mapDispatchToProps = (dispatch) => ({
 });
 window.onbeforeunload = confirmExit;
 function confirmExit() {
-  return "Please click Update. Unsaved changes will be lost.";
+  manualUpdateProject();
 }
 export default connect(mapStateToProps, mapDispatchToProps)(SaveStatus);
