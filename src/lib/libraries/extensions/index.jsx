@@ -219,9 +219,9 @@ const menuItems = [
   {
     name: (
       <FormattedMessage
-        defaultMessage="Video Sensing"
-        description="Name for the 'Video Sensing' extension"
-        id="gui.extension.videosensing.name"
+        defaultMessage="Debugging console"
+        description="balls"
+        id="gui.extension.theshovelconsole.name"
       />
     ),
     extensionId: "theshovelconsole",
