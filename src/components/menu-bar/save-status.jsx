@@ -45,8 +45,4 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   onClickSave: () => dispatch(manualUpdateProject()),
 });
-window.onbeforeunload = confirmExit;
-function confirmExit() {
-  manualUpdateProject();
-}
 export default connect(mapStateToProps, mapDispatchToProps)(SaveStatus);
