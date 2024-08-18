@@ -219,26 +219,6 @@ const menuItems = [
   {
     name: (
       <FormattedMessage
-        defaultMessage="Debugging console"
-        description="balls"
-        id="gui.extension.theshovelconsole.name"
-      />
-    ),
-    extensionId: "theshovelconsole",
-    customInsetColor: "#74BDDC",
-    tags: [],
-    description: (
-      <FormattedMessage
-        defaultMessage="Cool debugging console"
-        description="yourmom"
-        id="gui.extension.theshovelconsole.description"
-      />
-    ),
-    featured: true,
-  },
-  {
-    name: (
-      <FormattedMessage
         defaultMessage="Video Sensing"
         description="Name for the 'Video Sensing' extension"
         id="gui.extension.videosensing.name"
