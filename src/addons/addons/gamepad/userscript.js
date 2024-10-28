@@ -35,7 +35,11 @@ export default async function ({ addon, console, msg }) {
     const result = new Set();
     for (const blocks of allBlocks) {
       for (const block of Object.values(blocks._blocks)) {
-        if (block.opcode === "event_whenkeypressed" || block.opcode === "sensing_keyoptions") {
+        if (
+          block.opcode === "event_whenkeypressed" ||
+          block.opcode === "event_whenkeyhit" ||
+          block.opcode === "sensing_keyoptions"
+        ) {
           // For blocks like "key (my variable) pressed?", the sensing_keyoptions still exists but has a null parent.
           if (block.opcode === "sensing_keyoptions" && !block.parent) {
             continue;
@@ -64,16 +68,26 @@ export default async function ({ addon, console, msg }) {
     if (!comment) {
       return null;
     }
-    const lineWithMagic = comment.text.split("\n").find((i) => i.endsWith(GAMEPAD_CONFIG_MAGIC));
+    const lineWithMagic = comment.text
+      .split("\n")
+      .find((i) => i.endsWith(GAMEPAD_CONFIG_MAGIC));
     if (!lineWithMagic) {
       console.warn("Gamepad comment does not contain valid line");
       return null;
     }
-    const jsonText = lineWithMagic.substr(0, lineWithMagic.length - GAMEPAD_CONFIG_MAGIC.length);
+    const jsonText = lineWithMagic.substr(
+      0,
+      lineWithMagic.length - GAMEPAD_CONFIG_MAGIC.length,
+    );
     let parsed;
     try {
       parsed = JSON.parse(jsonText);
-      if (!parsed || typeof parsed !== "object" || !Array.isArray(parsed.buttons) || !Array.isArray(parsed.axes)) {
+      if (
+        !parsed ||
+        typeof parsed !== "object" ||
+        !Array.isArray(parsed.buttons) ||
+        !Array.isArray(parsed.axes)
+      ) {
         throw new Error("Invalid data");
       }
     } catch (e) {
@@ -126,13 +140,19 @@ export default async function ({ addon, console, msg }) {
   container.className = "sa-gamepad-container";
   addon.tab.displayNoneWhileDisabled(container, { display: "flex" });
   const buttonContainer = document.createElement("span");
-  buttonContainer.className = addon.tab.scratchClass("button_outlined-button", "stage-header_stage-button");
+  buttonContainer.className = addon.tab.scratchClass(
+    "button_outlined-button",
+    "stage-header_stage-button",
+  );
   const buttonContent = document.createElement("div");
   buttonContent.className = addon.tab.scratchClass("button_content");
   const buttonImage = document.createElement("img");
-  buttonImage.className = addon.tab.scratchClass("stage-header_stage-button-icon");
+  buttonImage.className = addon.tab.scratchClass(
+    "stage-header_stage-button-icon",
+  );
   buttonImage.draggable = false;
-  buttonImage.src = addon.self.getResource("/gamepad.svg") /* rewritten by pull.js */;
+  buttonImage.src =
+    addon.self.getResource("/gamepad.svg") /* rewritten by pull.js */;
   buttonContent.appendChild(buttonImage);
   buttonContainer.appendChild(buttonContent);
   container.appendChild(buttonContainer);
@@ -170,7 +190,7 @@ export default async function ({ addon, console, msg }) {
         350,
         150,
         // minimized
-        false
+        false,
       );
     }
     didChangeProject();
@@ -197,7 +217,10 @@ export default async function ({ addon, console, msg }) {
     }
   };
   const handleEditorControllerChanged = () => {
-    document.body.classList.toggle("sa-gamepad-has-controller", editor.hasControllerSelected());
+    document.body.classList.toggle(
+      "sa-gamepad-has-controller",
+      editor.hasControllerSelected(),
+    );
     handleGamepadMappingChanged();
   };
   buttonContainer.addEventListener("click", () => {
@@ -210,10 +233,11 @@ export default async function ({ addon, console, msg }) {
     const editorEl = editor.generateEditor();
     handleEditorControllerChanged();
 
-    const { backdrop, container, content, closeButton, remove } = addon.tab.createModal(msg("settings"), {
-      isOpen: true,
-      useEditorClasses: true,
-    });
+    const { backdrop, container, content, closeButton, remove } =
+      addon.tab.createModal(msg("settings"), {
+        isOpen: true,
+        useEditorClasses: true,
+      });
 
     const handleKeyDown = (e) => {
       if (e.key === "Escape" && !e.target.closest("[data-accepting-input]")) {
@@ -279,20 +303,30 @@ export default async function ({ addon, console, msg }) {
     const storeSettingsCheckbox = document.createElement("input");
     storeSettingsCheckbox.type = "checkbox";
     storeSettingsCheckbox.checked = shouldStoreSettingsInProject;
-    storeSettingsCheckbox.addEventListener("change", handleStoreSettingsCheckboxChanged);
+    storeSettingsCheckbox.addEventListener(
+      "change",
+      handleStoreSettingsCheckboxChanged,
+    );
     storeSettingsLabel.prepend(storeSettingsCheckbox);
     extraOptionsContainer.appendChild(storeSettingsLabel);
 
     editor.focus();
   });
 
-  if (addon.tab.redux.state && addon.tab.redux.state.scratchGui.stageSize.stageSize === "small") {
+  if (
+    addon.tab.redux.state &&
+    addon.tab.redux.state.scratchGui.stageSize.stageSize === "small"
+  ) {
     document.body.classList.add("sa-gamepad-small");
   }
   document.addEventListener(
     "click",
     (e) => {
-      if (e.target.closest("[class*='stage-header_stage-button-first']:not(.sa-hide-stage-button)")) {
+      if (
+        e.target.closest(
+          "[class*='stage-header_stage-button-first']:not(.sa-hide-stage-button)",
+        )
+      ) {
         document.body.classList.add("sa-gamepad-small");
       } else if (
         e.target.closest("[class*='stage-header_stage-button-last']") ||
@@ -301,13 +335,14 @@ export default async function ({ addon, console, msg }) {
         document.body.classList.remove("sa-gamepad-small");
       }
     },
-    { capture: true }
+    { capture: true },
   );
 
   const virtualCursorElement = document.createElement("img");
   virtualCursorElement.hidden = true;
   virtualCursorElement.className = "sa-gamepad-cursor";
-  virtualCursorElement.src = addon.self.getResource("/cursor.png") /* rewritten by pull.js */;
+  virtualCursorElement.src =
+    addon.self.getResource("/cursor.png") /* rewritten by pull.js */;
   addon.self.addEventListener("disabled", () => {
     virtualCursorElement.hidden = true;
   });
@@ -433,16 +468,26 @@ export default async function ({ addon, console, msg }) {
           "fontsLoaded/SET_FONTS_LOADED",
           "scratch-gui/locales/SELECT_LOCALE",
         ],
-      }
+      },
     );
     container.dataset.editorMode = addon.tab.editorMode;
     if (target.className.includes("stage-size-row")) {
-      addon.tab.appendToSharedSpace({ space: "stageHeader", element: container, order: 1 });
+      addon.tab.appendToSharedSpace({
+        space: "stageHeader",
+        element: container,
+        order: 1,
+      });
     } else {
-      addon.tab.appendToSharedSpace({ space: "fullscreenStageHeader", element: container, order: 0 });
+      addon.tab.appendToSharedSpace({
+        space: "fullscreenStageHeader",
+        element: container,
+        order: 0,
+      });
     }
 
-    const monitorListScaler = document.querySelector("[class^='monitor-list_monitor-list-scaler']");
+    const monitorListScaler = document.querySelector(
+      "[class^='monitor-list_monitor-list-scaler']",
+    );
     monitorListScaler.appendChild(virtualCursorElement);
   }
 }

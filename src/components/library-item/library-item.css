@@ -34,7 +34,12 @@
     padding: 0.25rem;
     padding-bottom: 0;
 }
-.library-item-new {
+.library-item-sound.library-item-new {
+    /*
+        we have to use hue-rotate,
+        since the waveforms have their color baked in by design
+        & the play button styling would be annoying
+    */
     filter: hue-rotate(60deg);
 }
 .library-item-new-badge {
@@ -42,11 +47,14 @@
     color: white;
     font-size: 10px;
     font-weight: bold;
-    background-color: $sound-primary;
+    background-color: #eb6566;
     padding: 1px 5px;
     position: absolute;
     left: -8px;
     top: -8px;
+}
+.library-item-sound .library-item-new-badge {
+    background-color: $sound-primary;
 }
 
 .library-item-extension {
@@ -58,6 +66,12 @@
     border-color: $motion-primary;
 }
 .library-item-sound:hover {
+    border-color: $sound-primary;
+}
+.library-item-new:hover {
+    border-color: #eb6566;
+}
+.library-item-new.library-item-sound:hover {
     border-color: $sound-primary;
 }
 
@@ -115,7 +129,7 @@
     filter: brightness(0);
     opacity: 0.25;
 }
-[theme="dark"] .library-item-delete>img {
+[theme="dark"] .library-item-delete > img {
     filter: saturate(0) brightness(255);
 }
 .library-item-delete:hover > img {
@@ -132,18 +146,23 @@
     filter: brightness(0);
     opacity: 0.25;
 }
-[theme="dark"] .library-item-favorite[data-activated="false"]>img[data-usedimage="true"] {
+[theme="dark"]
+    .library-item-favorite[data-activated="false"]
+    > img[data-usedimage="true"] {
     filter: saturate(0) brightness(255);
 }
-.library-item-favorite[data-activated="false"]:hover > img[data-usedimage="true"] {
+.library-item-favorite[data-activated="false"]:hover
+    > img[data-usedimage="true"] {
     filter: brightness(1);
     opacity: 1;
 }
-.library-item-favorite[data-activated="false"]:active > img[data-usedimage="true"] {
+.library-item-favorite[data-activated="false"]:active
+    > img[data-usedimage="true"] {
     filter: brightness(1);
     opacity: 1;
 }
-.library-item-favorite[data-activated="false"]:active > img[data-usedimage="false"] {
+.library-item-favorite[data-activated="false"]:active
+    > img[data-usedimage="false"] {
     filter: brightness(1);
     opacity: 1;
 }
@@ -159,7 +178,7 @@
 }
 
 .disabled {
-    opacity: .5;
+    opacity: 0.5;
     cursor: auto;
 }
 
@@ -351,8 +370,8 @@
     display: block;
     font-weight: normal;
     line-height: 1.375rem;
-    padding-top: .3125rem;
-    padding-bottom: .25rem;
+    padding-top: 0.3125rem;
+    padding-bottom: 0.25rem;
 }
 
 .featured-extension-metadata {
@@ -416,9 +435,9 @@
     position: absolute;
     background-color: $data-primary;
     border-radius: 1rem;
-    box-shadow: 0 0 .5rem hsla(0, 0%, 0%, .25);
-    padding: .5rem 1rem;
-    font-size: .875rem;
+    box-shadow: 0 0 0.5rem hsla(0, 0%, 0%, 0.25);
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
     font-weight: bold;
     color: $ui-white;
 }
